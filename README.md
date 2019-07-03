@@ -1,19 +1,19 @@
 # psycho-test
 
-Estamos buscando a alguien que pueda análizar datos de evaluaciones de miles de niños de forma casi automática utilizando MySQL, R y RMarkdown. En particular, modelamos la habilidad de los niños usando el modelo Rasch y el paquete TAM de R. No importa si no tienes experiencia en esto, mientras lo quieras y puedas aprender.
+Estamos buscando a un(a) científico(a) que pueda procesar y analizar datos de evaluaciones de miles de niños de forma semi-automática, ordenada y reproducible, utilizando MySQL, R y RMarkdown. En particular, modelamos la habilidad de los niños usando modelos Rasch y el paquete TAM de R.
 
-Lecturas recomendadas:
+Lecturas básicas recomendadas:
 
 * https://swcarpentry.github.io/r-novice-gapminder/02-project-intro/ para crear proyectos en R reproducibles y autocontenidos.
 
 * https://swcarpentry.github.io/git-novice/14-supplemental-rstudio/ para utilizar git.
 
-* https://en.wikipedia.org/wiki/Rasch_model sobre el modelo de Rasch
+* https://en.wikipedia.org/wiki/Rasch_model sobre el modelo Rasch
 
 
+## Problema
 
-
-En tres campus (Campus A, Campus B y Campus C) se aplicó un examen para medir habilidades lectoras de niños de 6o de primaria en los ciclos escolares (year) 2017-2018 (2018) y 2018-2019 (2019). El examen tiene 39 reactivos; cada reactivo (idQuestion) tiene una dificultad y discriminación distintas (por estimar, utilizando el model Rasch), y cada niño contestó (o dejó en blanco) correcta o incorrectamente estas preguntas.
+En tres campus (Campus A, Campus B y Campus C) se aplicó un examen para medir habilidades lectoras de niños de 6o de primaria en los ciclos escolares (year) 2017-2018 (2018) y 2018-2019 (2019). El examen tiene 39 reactivos; cada reactivo (idQuestion) tiene una dificultad y discriminación distintas (por estimar, utilizando el modelo Rasch), y cada niño contestó (o dejó en blanco) correcta o incorrectamente estas preguntas.
 
 A partir de los datos proporcionados, contestar:
 
@@ -24,6 +24,8 @@ A partir de los datos proporcionados, contestar:
 3. El ranking de los alumnos dentro de una escuela por nivel de habilidad
 
 4. Dados los parámetros del modelo 2018, ¿los alumnos 2019 mejoraron o empeoraron en general (todos los campus) y por campus (qué campus empeoró, qué campus mejoró, qué campus se quedó igual)?  
+
+Te recomendamos seguir la guía de estilo de programación tidyverse y seguir el proceso de ciencia de datos de Microsoft.
 
 ------
 
@@ -40,7 +42,7 @@ already called `create.project()` to set up this project and all of its
 contents.
 
 To load your new project, you'll first need to `setwd()` into the directory
-where this README file is located (pro tip: use RStudio's projects - .Rproject ). Then you need to run the following two
+where this README file is located (pro tip: use RStudio's projects - .Rproject). Then you need to run the following two
 lines of R code:
 
 	library('ProjectTemplate')
