@@ -1,3 +1,4 @@
+
 `r knitr::opts_knit$set(root.dir='..')`
 
 ```{r,include=FALSE}
@@ -34,7 +35,7 @@ A partir de los datos proporcionados, contestar:
 
 ### Intoducción
 El modelo Rasch es ampliamente usado para el análisis de datos educacionales. En la práctica dado un test, se reportan los estimadores de la dificultad y discriminación de los ítems y los estimadores de las habilidades de los individuos. Para ver una introducción bastante intuitiva de este modelo puede consultar
-http://dx.doi.org/10.15517ap.v29i119.18911
+https://dialnet.unirioja.es/descarga/articulo/5252946.pdf
 
 En R existe una implementación del del modelo de Rasch dentro del paquete TAM con diversas variantes, en particular para este problema utilizaremos las funciones
 
@@ -42,7 +43,7 @@ En R existe una implementación del del modelo de Rasch dentro del paquete TAM c
 - ``TAM::tam.wle``
 
 La primera sirve para estimar los parámetros de dificultad y discriminación de los items y la segunda para
-estimar el parámetro de la habilidad de los individuos. Se puede consultar la documentación de estas en los siguientes links:
+estimar el parámetro de la habilidad de los individuos. Es importante aclarar que se utiliza ``TAM::tam.mml.2pl`` por que el modelo de Rasch en su forma clasica exige que la discriminación sea igual para todos los items. Se puede consultar la documentación de estas en los siguientes links:
 
 - https://www.rdocumentation.org/packages/TAM/versions/2.13-15/topics/tam.mml
 - https://www.rdocumentation.org/packages/TAM/versions/2.13-15/topics/tam.wle

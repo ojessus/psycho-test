@@ -36,7 +36,7 @@ educacionales. En la práctica dado un test, se reportan los estimadores
 de la dificultad y discriminación de los ítems y los estimadores de las
 habilidades de los individuos. Para ver una introducción bastante
 intuitiva de este modelo puede consultar
-<a href="http://dx.doi.org/10.15517ap.v29i119.18911" class="uri">http://dx.doi.org/10.15517ap.v29i119.18911</a>
+<a href="https://dialnet.unirioja.es/descarga/articulo/5252946.pdf" class="uri">https://dialnet.unirioja.es/descarga/articulo/5252946.pdf</a>
 
 En R existe una implementación del del modelo de Rasch dentro del
 paquete TAM con diversas variantes, en particular para este problema
@@ -47,8 +47,10 @@ utilizaremos las funciones
 
 La primera sirve para estimar los parámetros de dificultad y
 discriminación de los items y la segunda para estimar el parámetro de la
-habilidad de los individuos. Se puede consultar la documentación de
-estas en los siguientes links:
+habilidad de los individuos. Es importante aclarar que se utiliza
+`TAM::tam.mml.2pl` por que el modelo de Rasch en su forma clasica exige
+que la discriminación sea igual para todos los items. Se puede consultar
+la documentación de estas en los siguientes links:
 
 -   <a href="https://www.rdocumentation.org/packages/TAM/versions/2.13-15/topics/tam.mml" class="uri">https://www.rdocumentation.org/packages/TAM/versions/2.13-15/topics/tam.mml</a>
 -   <a href="https://www.rdocumentation.org/packages/TAM/versions/2.13-15/topics/tam.wle" class="uri">https://www.rdocumentation.org/packages/TAM/versions/2.13-15/topics/tam.wle</a>
