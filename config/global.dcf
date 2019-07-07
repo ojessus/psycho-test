@@ -3,12 +3,12 @@ data_loading: TRUE
 data_loading_header: TRUE
 data_ignore:
 cache_loading: TRUE
-recursive_loading: FALSE
+recursive_loading: TRUE
 munging: TRUE
 logging: FALSE
 logging_level: INFO
-load_libraries: FALSE
-libraries: reshape2, plyr, tidyverse, stringr, lubridate
+load_libraries: TRUE
+libraries: reshape2, plyr, tidyverse, stringr, lubridate,coda,TAM,lavaan,shiny,rmarkdown
 as_factors: TRUE
 tables_type: tibble
 attach_internal_libraries: FALSE
