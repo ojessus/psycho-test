@@ -36,7 +36,7 @@ educacionales. En la práctica dado un test, se reportan los estimadores
 de la dificultad y discriminación de los ítems y los estimadores de las
 habilidades de los individuos. Para ver una introducción bastante
 intuitiva de este modelo puede consultar
-<a href="http://dx.doi.org/10.15517ap.v29i119.18911" class="uri">http://dx.doi.org/10.15517ap.v29i119.18911</a>
+<a href="https://dialnet.unirioja.es/descarga/articulo/5252946.pdf" class="uri">Modelos de Rasch</a>
 
 En R existe una implementación del del modelo de Rasch dentro del
 paquete TAM con diversas variantes, en particular para este problema
