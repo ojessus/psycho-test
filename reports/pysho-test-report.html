@@ -417,11 +417,26 @@ $(document).ready(function () {
 </div>
 <div id="uso" class="section level3">
 <h3>Uso</h3>
-<p><code>raschModel(año)</code></p>
+<p><code>raschModel(año,model)</code></p>
 </div>
 <div id="argumentos" class="section level3">
 <h3>Argumentos</h3>
-<p>año: numero entero correspondiente al año para el cual se calcularan los parámetros del modelo de Rasch</p>
+<blockquote>
+<p>año:</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>Numero entero correspondiente al año para el cual se calcularan los parámetros del modelo de Rasch</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>model:</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>cadena con el modelo a utilizar <code>rasch</code> para utilizar el modelo clasico o <code>2pl</code> para hacer una estimación de los parámetros de discriminación.</li>
+</ul>
+</blockquote>
 </div>
 <div id="valores-que-regresa" class="section level3">
 <h3>Valores que regresa</h3>
@@ -453,19 +468,22 @@ $(document).ready(function () {
 </div>
 <div id="fuente" class="section level3">
 <h3>Fuente</h3>
-<pre class="r"><code>raschModel&lt;-function(ciclo){
+<pre><code>raschModel&lt;-function(ciclo,model){
   #Costruimos un dataframe con los datos requeridos para TAM::tam.mml.2pl
   itemDf &lt;- tidy.test.data %&gt;% filter(year==ciclo) %&gt;% spread(key=idQuestion,value=isCorrect)
   resp &lt;- itemDf %&gt;% select(-c(&quot;year&quot;, &quot;campusName&quot;,&quot;idUser_int&quot;))
   #utilizaremos TAM::tam.mml.2pl por que es el unico que estima las pendientes, es decir, el parámetro
   #de discriminacón
-  rashM &lt;- TAM::tam.mml.2pl(resp=resp,irtmodel=&quot;2PL&quot;,verbose=FALSE)
-
+  if(model==&#39;rasch&#39;){
+    rashM &lt;- TAM::tam(resp=resp,verbose=FALSE)
+  }else{
+    rashM &lt;- TAM::tam.mml.2pl(resp=resp,irtmodel=&quot;2PL&quot;,verbose=FALSE)
+  }
   #Construimos el dataframe con los parametros dificultad y discriminacion para los items de 2018
   # rash2018$item$AXsi_.Cat1 =&gt; dificultad para cada pregunta
   # rash2018$item$B.Cat1.Dim1 =&gt; discriminación para cada pregunta
   DaDDf &lt;- rashM$item %&gt;% select(AXsi_.Cat1, B.Cat1.Dim1)
-  colnames(DaDDf)&lt;-c(&#39;dificultad&#39;,&#39;discriminación&#39;)
+  colnames(DaDDf)&lt;-c(&#39;dificultad&#39;,&#39;discriminacion&#39;)
   #En DaDDf esta el dataframe con los parámetros dificultad y discriminación por pregunta
 
   #utilizaremos TAM::tam.wle para calcular la habilidad de cada persona
@@ -497,10 +515,10 @@ $(document).ready(function () {
 <pre><code>## Load clean data from file test_data.csv in tidy.test.data 
 ## Save clean data from file test_data.csv in data/tidy test_data.csv</code></pre>
 <ul>
-<li>Estimamos los parámetros para los años 2018 y 2019</li>
+<li>Estimamos los parámetros para los años 2018 y 2019 (si se quiere utilizar el metodo de Rasch clasico, es decir, sin estimar los parámetros de discriminación solo cambie <code>2pl</code> por <code>rasch</code>)</li>
 </ul>
-<pre class="r"><code>M2018 &lt;- raschModel(2018)
-M2019 &lt;- raschModel(2019)</code></pre>
+<pre class="r"><code>M2018 &lt;- raschModel(2018,&#39;2pl&#39;)
+M2019 &lt;- raschModel(2019,&#39;2pl&#39;)</code></pre>
 <ul>
 <li>Definimos una función para normalizar datos</li>
 </ul>

@@ -70,12 +70,20 @@ calculo de rankigs.
 
 ### Uso
 
-`raschModel(año)`
+`raschModel(año,model)`
 
 ### Argumentos
 
-año: numero entero correspondiente al año para el cual se calcularan los
-parámetros del modelo de Rasch
+> año:
+
+> -   Numero entero correspondiente al año para el cual se calcularan
+>     los parámetros del modelo de Rasch
+
+> model:
+
+> -   cadena con el modelo a utilizar `rasch` para utilizar el modelo
+>     clasico o `2pl` para hacer una estimación de los parámetros de
+>     discriminación.
 
 ### Valores que regresa
 
@@ -111,42 +119,43 @@ Una lista con los siguientes dataframes:
 
 ### Fuente
 
-``` r
-raschModel<-function(ciclo){
-  #Costruimos un dataframe con los datos requeridos para TAM::tam.mml.2pl
-  itemDf <- tidy.test.data %>% filter(year==ciclo) %>% spread(key=idQuestion,value=isCorrect)
-  resp <- itemDf %>% select(-c("year", "campusName","idUser_int"))
-  #utilizaremos TAM::tam.mml.2pl por que es el unico que estima las pendientes, es decir, el parámetro
-  #de discriminacón
-  rashM <- TAM::tam.mml.2pl(resp=resp,irtmodel="2PL",verbose=FALSE)
+    raschModel<-function(ciclo,model){
+      #Costruimos un dataframe con los datos requeridos para TAM::tam.mml.2pl
+      itemDf <- tidy.test.data %>% filter(year==ciclo) %>% spread(key=idQuestion,value=isCorrect)
+      resp <- itemDf %>% select(-c("year", "campusName","idUser_int"))
+      #utilizaremos TAM::tam.mml.2pl por que es el unico que estima las pendientes, es decir, el parámetro
+      #de discriminacón
+      if(model=='rasch'){
+        rashM <- TAM::tam(resp=resp,verbose=FALSE)
+      }else{
+        rashM <- TAM::tam.mml.2pl(resp=resp,irtmodel="2PL",verbose=FALSE)
+      }
+      #Construimos el dataframe con los parametros dificultad y discriminacion para los items de 2018
+      # rash2018$item$AXsi_.Cat1 => dificultad para cada pregunta
+      # rash2018$item$B.Cat1.Dim1 => discriminación para cada pregunta
+      DaDDf <- rashM$item %>% select(AXsi_.Cat1, B.Cat1.Dim1)
+      colnames(DaDDf)<-c('dificultad','discriminacion')
+      #En DaDDf esta el dataframe con los parámetros dificultad y discriminación por pregunta
 
-  #Construimos el dataframe con los parametros dificultad y discriminacion para los items de 2018
-  # rash2018$item$AXsi_.Cat1 => dificultad para cada pregunta
-  # rash2018$item$B.Cat1.Dim1 => discriminación para cada pregunta
-  DaDDf <- rashM$item %>% select(AXsi_.Cat1, B.Cat1.Dim1)
-  colnames(DaDDf)<-c('dificultad','discriminación')
-  #En DaDDf esta el dataframe con los parámetros dificultad y discriminación por pregunta
+      #utilizaremos TAM::tam.wle para calcular la habilidad de cada persona
+      rashH <-TAM::tam.wle(rashM,progress=FALSE)
 
-  #utilizaremos TAM::tam.wle para calcular la habilidad de cada persona
-  rashH <-TAM::tam.wle(rashM,progress=FALSE)
+      #almacenamos las habilidades en un dataframe
+      habilidad <- as.data.frame(rashH$theta)
+      habilidadDf <- data.frame(itemDf$campusName,itemDf$idUser_int,habilidad)
+      colnames(habilidadDf)<-c("campusName","idUser_int","habilidad")
 
-  #almacenamos las habilidades en un dataframe
-  habilidad <- as.data.frame(rashH$theta)
-  habilidadDf <- data.frame(itemDf$campusName,itemDf$idUser_int,habilidad)
-  colnames(habilidadDf)<-c("campusName","idUser_int","habilidad")
+      #Scalamos el score de las habilidades entre 0 y 100
+      minh = min(habilidadDf$habilidad)
+      maxh = max(habilidadDf$habilidad)
+      habilidadDf$scaledHability<-with(habilidadDf,((habilidad-minh)/(maxh-minh))*100)
 
-  #Scalamos el score de las habilidades entre 0 y 100
-  minh = min(habilidadDf$habilidad)
-  maxh = max(habilidadDf$habilidad)
-  habilidadDf$scaledHability<-with(habilidadDf,((habilidad-minh)/(maxh-minh))*100)
-
-  #Calculamos el ranking entre 0 y 100 por escuela
-  rankingCampus<-aggregate(scaledHability~campusName,habilidadDf,mean)
-  colnames(rankingCampus)<-c("campusName","ranking")
-  vareturn <- list("DaDDf"=DaDDf,"habilidadDf"=habilidadDf,"rankingCampus"=rankingCampus)
-  return(vareturn)
-}
-```
+      #Calculamos el ranking entre 0 y 100 por escuela
+      rankingCampus<-aggregate(scaledHability~campusName,habilidadDf,mean)
+      colnames(rankingCampus)<-c("campusName","ranking")
+      vareturn <- list("DaDDf"=DaDDf,"habilidadDf"=habilidadDf,"rankingCampus"=rankingCampus)
+      return(vareturn)
+    }
 
 ### Implementación
 
@@ -160,11 +169,13 @@ source("src/eda.R")
     ## Load clean data from file test_data.csv in tidy.test.data 
     ## Save clean data from file test_data.csv in data/tidy test_data.csv
 
--   Estimamos los parámetros para los años 2018 y 2019
+-   Estimamos los parámetros para los años 2018 y 2019 (si se quiere
+    utilizar el metodo de Rasch clasico, es decir, sin estimar los
+    parámetros de discriminación solo cambie `2pl` por `rasch`)
 
 ``` r
-M2018 <- raschModel(2018)
-M2019 <- raschModel(2019)
+M2018 <- raschModel(2018,'2pl')
+M2019 <- raschModel(2019,'2pl')
 ```
 
 -   Definimos una función para normalizar datos

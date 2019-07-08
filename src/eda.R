@@ -34,14 +34,17 @@ load.project()
 #                rankink se calcula como la habilidad promedio en una escala de 0 a 100    #
 ############################################################################################
 ############################# Inicia Funcion raschModel ####################################
-raschModel<-function(ciclo){
+raschModel<-function(ciclo,model){
   #Costruimos un dataframe con los datos requeridos para TAM::tam.mml.2pl
   itemDf <- tidy.test.data %>% filter(year==ciclo) %>% spread(key=idQuestion,value=isCorrect)
   resp <- itemDf %>% select(-c("year", "campusName","idUser_int"))
   #utilizaremos TAM::tam.mml.2pl por que es el unico que estima las pendientes, es decir, el parámetro
   #de discriminacón
-  rashM <- TAM::tam.mml.2pl(resp=resp,irtmodel="2PL",verbose=FALSE)
-
+  if(model=='rasch'){
+    rashM <- TAM::tam(resp=resp,verbose=FALSE)
+  }else{
+    rashM <- TAM::tam.mml.2pl(resp=resp,irtmodel="2PL",verbose=FALSE)
+  }
   #Construimos el dataframe con los parametros dificultad y discriminacion para los items de 2018
   # rash2018$item$AXsi_.Cat1 => dificultad para cada pregunta
   # rash2018$item$B.Cat1.Dim1 => discriminación para cada pregunta
